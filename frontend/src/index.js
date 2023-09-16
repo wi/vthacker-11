@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 
@@ -14,6 +13,8 @@ root.render(
   authorizationParams={{
     redirect_uri: window.location.origin
   }}
+  useRefreshTokens={true}
+  cacheLocation="localstorage"
   >
   <React.StrictMode>
     <App />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 
@@ -22,9 +22,20 @@ const loginStyle = {
     justifyContent: "flex-end",
 }
 
+const localstorageAuthKey = "@@auth0spajs@@::JpeLGJQBmOoGRLfzrcNMQvVCGPZ4D3nk::@@user@@"
 
-export default function Nav(loggedIn=false) {
-    const { loginWithRedirect } = useAuth0();
+
+export default function Nav() {
+    const { loginWithRedirect, logout } = useAuth0();
+
+    // Only used for inital state
+    const stats = localStorage.getItem(localstorageAuthKey);
+    const loggedIn = stats ? true : false;
+
+    const handleLogOut = () => {
+        logout({logoutParams: {returnTo: "http://localhost:3000"}})
+        //localStorage.clear() // clear all data as they wont need it
+    }
 
 
   return (
@@ -35,7 +46,13 @@ export default function Nav(loggedIn=false) {
         <a href="./test" style={linkStyle}>test</a>
         <a href="./test" style={linkStyle}>test</a>
 
+        {loggedIn ? 
+        <>
+            <button style={loginStyle} onClick={(e) => handleLogOut()}>Log Out</button>
+        </>
+        :
         <button style={loginStyle} onClick={(e) => loginWithRedirect()}>Login</button>
+        }
         </div>
     </nav>
   );
