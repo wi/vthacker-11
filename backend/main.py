@@ -4,6 +4,16 @@ from icalendar import Calendar
 from flask import Flask, request
 from flask_cors import CORS
 from datetime import datetime, timedelta
+from pymongo import MongoClient
+
+client = MongoClient("mongodb+srv://ysfmha:billyjoe@cluster0.7dumxqk.mongodb.net/")
+db = client['Cluster0']
+collection = db.get_collection("users")
+
+
+def create_user(email: str):
+    user = collection.insert_one({"email": email, "urls": [], "priority": []})
+    return user
 
 
 app = Flask(__name__)
@@ -17,20 +27,51 @@ def index():
 
 @app.route("/getUserLinks")
 def getUserLinks():
-    return ["link1", "link2"]
+    email = request.headers.get("email", None)
+    user = collection.find_one({"email": email})
+    if not user:
+        user = create_user(email)
+
+    return user['urls']
 
 @app.route("/setUserLinks")
 def setUserLinks():
     email = request.headers.get("email", None)
+    urls = request.headers.get("urls", "").split(',')
+
+    if not urls:
+        return {"success": False}, 400
+
+    user = collection.find_one({"email": email})
+    if not user:
+        user = create_user(email)
+    user['urls'] = urls
+    
+    collection.update_one({"email": email}, {"$set": { user }})
     return {"success": True}
 
-@app.route("/getUserPersonalization")
+@app.route("/getUserPriority")
 def getUserPersonalization():
+    email = request.headers.get("email", None)
+    user = collection.find_one({"email": email})
+    if not user:
+        user = create_user(email)
+        
+    return user['priority']
+
+
+        
+
+@app.route("/setUserPriority")
+def setUserPersonalization():
+    priority = request.headers.get("priority", "").split(",")
+    if not priority:
+        return {"success": False}, 400
+    user = collection.find_one({"email": email})
+    if not user:
+        user = create_user(email)
     return {"success": False}
 
-@app.route("/setUserPersonalization")
-def setUserPersonalization():
-    return {"success": False}
 
 @app.route("/getAssignments")
 def getAssignments():
