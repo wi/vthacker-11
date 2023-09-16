@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import Nav from "./componants/nav"
 import CalLinkInput from './componants/CalInput.jsx';
 import ToDo from './componants/ToDo';
+import Settings from './componants/Settings';
 
 
 const localstorageAuthKey = "@@auth0spajs@@::JpeLGJQBmOoGRLfzrcNMQvVCGPZ4D3nk::@@user@@"
@@ -19,6 +20,7 @@ function App() {
       <>
         <CalLinkInput />
         <ToDo />
+        <Settings />
       </>
       }
       </div>
