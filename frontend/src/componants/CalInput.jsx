@@ -9,6 +9,7 @@ const filterKey = "filterKey"
 export default function CalLinkInput() {
 
     const [links, setLinks] = useState([])
+    const [filterZoom, setFilterZoom] = useState()
     const {user} = useAuth0()
 
 
@@ -40,7 +41,7 @@ export default function CalLinkInput() {
           method: "POST",
           headers: {
             "email": user.email,
-            "links": newLinks.join(",")
+            "urls": newLinks.join(",")
           }
         }).catch(err => err)
         setLinks(newLinks)
@@ -51,7 +52,7 @@ export default function CalLinkInput() {
           method: "POST",
           headers: {
             "email": user.email,
-            "links": links.join(",")
+            "urls": links.join(",")
           }
         }).catch(err => err)
       }
@@ -68,11 +69,9 @@ export default function CalLinkInput() {
       }
 
       function handleFilterChange(e) {
+        const fitlerValue = 
         localStorage.setItem(filterKey, e.target.value)
       }
-
-
-
       
 
 
@@ -90,8 +89,8 @@ export default function CalLinkInput() {
           <Button onClick={e => handleSave()} style={{alignSelf: "center", width: "50%"}} backgroundColor="#bae1ff">Save</Button>
         </div>
         <div style={{marginTop: "10px"}}>
-          
           <input type="text" defaultValue={localStorage.getItem(filterKey) ?? ""} placeholder="Filter events (Seperated By Commas)" style={{width: "100%"}} onInput={e => handleFilterChange(e)}></input>
+          
         </div>
 
     </div>

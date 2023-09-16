@@ -5,15 +5,18 @@ from flask import Flask, request
 from flask_cors import CORS
 from datetime import datetime, timedelta
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 
-client = MongoClient("mongodb+srv://ysfmha:billyjoe@cluster0.7dumxqk.mongodb.net/")
-db = client['Cluster0']
+
+uri = "mongodb+srv://admin:admin@scythe.ur362.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(uri, server_api=ServerApi('1'))
+db = client['users']
 collection = db.get_collection("users")
 
 
 def create_user(email: str):
     user = collection.insert_one({"email": email, "urls": [], "priority": []})
-    return user
+    return {"email": email, "urls": [], "priority": []}
 
 
 app = Flask(__name__)
@@ -34,10 +37,11 @@ def getUserLinks():
 
     return user['urls']
 
-@app.route("/setUserLinks")
+@app.route("/setUserLinks", methods=['GET', 'POST'])
 def setUserLinks():
     email = request.headers.get("email", None)
     urls = request.headers.get("urls", "").split(',')
+    print(urls)
 
     if not urls:
         return {"success": False}, 400
@@ -46,8 +50,9 @@ def setUserLinks():
     if not user:
         user = create_user(email)
     user['urls'] = urls
+    print(user)
     
-    collection.update_one({"email": email}, {"$set": { user }})
+    collection.update_one({"email": email}, {"$set": user })
     return {"success": True}
 
 @app.route("/getUserPriority")
@@ -62,15 +67,20 @@ def getUserPersonalization():
 
         
 
-@app.route("/setUserPriority")
+@app.route("/setUserPriority", methods=['GET', 'POST'])
 def setUserPersonalization():
+    email = request.headers.get("email", None)
     priority = request.headers.get("priority", "").split(",")
     if not priority:
         return {"success": False}, 400
     user = collection.find_one({"email": email})
+    user = collection.find_one({"email": email})
     if not user:
         user = create_user(email)
-    return {"success": False}
+    user['priority'] = priority
+    
+    collection.update_one({"email": email}, {"$set": user })
+    return {"success": True}
 
 
 @app.route("/getAssignments")
