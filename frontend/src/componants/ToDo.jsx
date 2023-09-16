@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import {v4} from "uuid"
 
 const cacheKey = "linkCache";
 const filterKey = "filterkey"
@@ -12,6 +13,7 @@ export default function ToDo() {
     const [assignments, setAssignments] = useState([])
     const [filter, setFilter] = useState([])
     const [p, setPriority] = useState([])
+    const [slashed, setSlashed] = useState([])
 
     // inital state
     useEffect(() => {
@@ -79,7 +81,7 @@ export default function ToDo() {
                         }
                     });
             
-                    monthDayEvents[key].push({ ...event, priority });
+                    monthDayEvents[key].push({ ...event, priority, uuid: v4() });
                     });
               
                     const keys = Object.keys(monthDayEvents).sort();
@@ -103,11 +105,20 @@ export default function ToDo() {
         }).catch(err =>null)
     }, [links, filter, p]);
 
+    function handleToDoClick(id) {
+        if(slashed.includes(id)) {
+            const newSlashed = slashed.filter(i => i != id)
+            setSlashed(newSlashed)
+        } else {
+            setSlashed([...slashed, id])
+        }
+    }
+
     
 
   return (
     <div style={{width: "33.33%", display: "flex", alignContent: "center", flexWrap: "wrap", padding: "0px 20px"}}>
-      <div style={{backgroundColor: "#E2DFD2", height: "100vh", overflowY: "scroll", overflowX:"hidden", width: "100%", padding: "5px", maxWidth: "100%"}}>
+      <div style={{backgroundColor: "#d8f8e1", height: "100vh", overflowY: "scroll", overflowX:"hidden", width: "100%", padding: "5px", maxWidth: "100%"}}>
         {
             assignments.map((dayContainer, index) => {
                 const day = dayContainer.monthDay
@@ -118,13 +129,10 @@ export default function ToDo() {
                             console.log(assignment)
                             const date = new Date(assignment.end * 1000);
                             const info = assignment.summary
-                            const breakPoint = pos !== 0 && pos%2===0;
-                            console.log(breakPoint)
-
+                            const slash = slashed.includes(assignment.uuid)                            
                             if (filter.some(filterWord => info.toLowerCase().includes(filterWord.toLowerCase()))) return <></>;
-
                             return <>
-                            <p>{info}</p>
+                            <p style={{cursor: "pointer", textDecoration: slash ? "line-through" : "", color: slash ? "#fcb7af" : "black" }} onClick={e => handleToDoClick(assignment.uuid)} id>{info}</p>
                             <p style={{fontSize: "11px"}}>Due At: {date.toLocaleTimeString('en-US', { timeZone: 'America/New_York' })}</p>
                             <br/>
                             </>
