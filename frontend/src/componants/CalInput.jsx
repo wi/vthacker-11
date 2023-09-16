@@ -84,7 +84,7 @@ export default function CalLinkInput() {
       <h1 style={{display: "flex",justifyContent: "center" ,fontSize: "30px"}}>Link Input</h1>
         {links.map((url, index) => {
             return <div key={index} style={{display: "flex", alignItems: "center", flexWrap: "nowrap", width: "100%"}}>
-                <input type="text" defaultValue={url} onInput={(e) => handleInputChange(e, index)} style={{width: "85%"}}></input>
+                <input type="text" defaultValue={url} onInput={(e) => handleInputChange(e, index)} style={{width: "85%", borderStyle: "solid", borderWidth: "3px", borderRadius: "3px"}} placeholder="Enter .ics URL"></input>
                 <Button backgroundColor="#ffb3ba" size="xs" onClick={e => handleDelete(index)}>Delete</Button>
             </div>
         })}
