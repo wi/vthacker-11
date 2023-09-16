@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -14,8 +14,20 @@ def index():
 
 @app.route("/getUserLinks")
 def getUserLinks():
-    print("asd")
     return ["link1", "link2"]
+
+@app.route("/setUserLinks")
+def setUserLinks():
+    email = request.headers.get("email", None)
+    return {"success": True}
+
+@app.route("getUserPersonalization")
+def getUserPersonalization():
+    return {"success": False}
+
+@app.route("setUserPersonalization")
+def setUserPersonalization():
+    return {"success": False}
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
