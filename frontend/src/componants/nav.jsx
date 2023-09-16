@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "@chakra-ui/react";
 
 
 const navStyle = {
@@ -10,19 +11,6 @@ const navStyle = {
 
 }
 
-const linkStyle = {
-    margin: "20px",
-}
-
-
-const profileStyle = {
-
-}
-
-const loginStyle = {
-    marginRight: "auto",
-    justifyContent: "flex-end",
-}
 
 const localstorageAuthKey = "@@auth0spajs@@::JpeLGJQBmOoGRLfzrcNMQvVCGPZ4D3nk::@@user@@"
 
@@ -36,25 +24,21 @@ export default function Nav() {
 
     const handleLogOut = () => {
         logout({logoutParams: {returnTo: "http://localhost:3000"}})
+        localStorage.clear()
         //localStorage.clear() // clear all data as they wont need it
     }
 
 
   return (
     <nav style={navStyle}>
-        <div>
-        {/* Your component content here */}
-        <a href="./test" style={linkStyle}>test</a>
-        <a href="./test" style={linkStyle}>test</a>
-        <a href="./test" style={linkStyle}>test</a>
+        <div style={{display: "flex", justifyContent: "space-between"}}>
+        <img src="/hlogo.png" alt="logo" style={{maxHeight: "100%", width: "50px", maxWidth: "75px", display: "flex", flexDirection: "row", justifyContent: "flex-start"}}/>
 
-        {loggedIn ? 
-        <>
-            <button style={loginStyle} onClick={(e) => handleLogOut()}>Log Out</button>
-        </>
+        {loggedIn ? <Button style={{backgroundColor: "#fdfd96", display: "flex", flexDirection: "row", justifyContent: "flex-end"}} onClick={(e) => handleLogOut()}>Log Out</Button>
         :
-        <button style={loginStyle} onClick={(e) => loginWithRedirect()}>Login</button>
+        <Button style={{backgroundColor: "#ffda9e", display: "flex", flexDirection: "row", justifyContent: "flex-end"}} onClick={(e) => loginWithRedirect()}>Login</Button>
         }
+
         </div>
     </nav>
   );
