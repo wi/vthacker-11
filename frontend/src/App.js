@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import HelloWorld from "./componants/helloWorld.jsx";
 import Nav from "./componants/nav"
 import CalLinkInput from './componants/CalInput.jsx';
+import ToDo from './componants/ToDo';
 
 
 const localstorageAuthKey = "@@auth0spajs@@::JpeLGJQBmOoGRLfzrcNMQvVCGPZ4D3nk::@@user@@"
@@ -14,11 +14,15 @@ function App() {
   return (
     <ChakraProvider>
       <Nav />
-
+      <div style={{display: "flex", paddingTop: "5px"}}>
       {loggedIn && 
-      <CalLinkInput />
+      <>
+        <CalLinkInput />
+        <ToDo />
+      </>
       }
-      <HelloWorld />
+      </div>
+
     </ChakraProvider>
   );
 }

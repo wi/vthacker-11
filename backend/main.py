@@ -70,7 +70,7 @@ def getAssignments():
                         print(component.keys())
                         desc = component.get("description")
                         zoom = False
-                        if "zoom" in component.get("location", ""):
+                        if "zoom" in component.get("location", "").lower():
                             zoom = True
 
                         results.append({"summary": component.get("summary"), "start": startdt.timestamp(), "end": enddt.timestamp(), "zoom": zoom })

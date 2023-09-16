@@ -5,6 +5,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 const navStyle = {
     display: "flex",
     flexDirection: "column",
+    padding: "20px",
+    boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
 
 }
 
