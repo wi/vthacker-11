@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 
 
-uri = "mongodb+srv://admin:admin@scythe.ur362.mongodb.net/?retryWrites=true&w=majority"
+uri = ""
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client['users']
 collection = db.get_collection("users")
@@ -41,7 +41,6 @@ def getUserLinks():
 def setUserLinks():
     email = request.headers.get("email", None)
     urls = request.headers.get("urls", "").split(',')
-    print(urls)
 
     if not urls:
         return {"success": False}, 400
@@ -50,7 +49,6 @@ def setUserLinks():
     if not user:
         user = create_user(email)
     user['urls'] = urls
-    print(user)
     
     collection.update_one({"email": email}, {"$set": user })
     return {"success": True}
@@ -118,8 +116,6 @@ def getAssignments():
                         # More then 2 weeks in the future skip it
                         elif startdt.timestamp() > future_max.timestamp():
                             continue
-                        print(component.keys())
-                        desc = component.get("description")
                         zoom = False
                         if "zoom" in component.get("location", "").lower():
                             zoom = True
